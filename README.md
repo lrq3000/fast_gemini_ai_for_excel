@@ -1,7 +1,4 @@
 ## Excel Plugin for Google's Gemini AI Model
-
-# Excel Add-in for Gemini AI by Google
-
 This project is an Excel Add-in built for integrating with the Gemini AI model by Google.
 
 ## Instructions
