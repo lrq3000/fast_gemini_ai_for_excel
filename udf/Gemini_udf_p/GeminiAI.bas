@@ -28,7 +28,7 @@ Public Function Gemini_udf_p( _
         Optional word_count As Long = 0) As Variant
     
     If Len(api_key) = 0 Then
-        Gemini_udf = "Error: API key missing"
+        Gemini_udf_p = "Error: API key missing"
         Exit Function
     End If
     
@@ -38,7 +38,7 @@ Public Function Gemini_udf_p( _
     req.Launch prompt, api_key, model, word_count, Application.Caller
     gGeminiRequests.Add req
     
-    Gemini_udf = "Pending…"              'temporary placeholder
+    Gemini_udf_p = "Pending..."              'temporary placeholder
 End Function
 
 '--------------------------------------------------------------
