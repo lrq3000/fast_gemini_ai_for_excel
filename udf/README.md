@@ -25,7 +25,7 @@ To use it, you need to import the .bas and .cls files as modules in any Excel fi
 
 1.  Open the **VBA editor** (`Alt + F11` -- or on some laptops, you may need to press `Fn + Alt + F11`)
     
-2.  Then go to `File > Import File...` and select `Gemini_udf/GeminiAI.bas`. It should be imported under a `Module` folder.
+2.  Then go to `File > Import File...` and select `Gemini_udf/GeminiAI.bas`. It should be imported under a `Module` folder. NOTE: if you get a #NAME error, make sure this file has CRLF line endings (you need to clone the git repository, you cannot just download the raw file from rawgithub).
 
 3. Do the same with the `Gemini_udf/cGeminiRequest.cls` file, it should be imported under a `Class Module` folder. NOTE: if it gets imported as a simple Module instead of a Class Module (or if you get the error `Expected: instruction end`, then ensure the .cls file has CRLF line returns and not just LF.
 
