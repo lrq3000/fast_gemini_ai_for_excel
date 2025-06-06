@@ -1,0 +1,3 @@
+# Force Windows line endings (CRLF) on these file types
+*.bas     text eol=crlf
+*.cls     text eol=crlf

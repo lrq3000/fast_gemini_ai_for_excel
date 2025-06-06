@@ -31,6 +31,8 @@ To use it, you need to import the .bas and .cls files as modules in any Excel fi
 
 4. In any cell, type `Gemini_udf_p("Prompt text"&A1;"Gemini_API_key";"Gemini_model")`. The Gemini model is optional, and also a max word count for the response can be added as a 4th optional argument. The cell should now show "Pending..."
 
-5. Use the fill handle to copy while increasing the counter over a range of cells. All the cells should show "Pending..."
+5. Use the fill handle to copy while increasing the counter over a range of cells. All the cells should show "Pending...". Note: if you want to be able to re-run the command, it is now time to make a copy in another cell or in a notebad, because the result will replace the formula.
 
-6. Open the Macros viewer (press `Alt + F8` or `Fn + Alt + F8` on some laptops), then select `StartGeminiPoller`, and tap on the `Execute` button. The cells should now all get filled with their final values after a short time (depending on the the selected AI model latency).
+6. Open the Macros viewer (press `Alt + F8` or `Fn + Alt + F8` on some laptops), then select `StartGeminiPoller`, and tap on the `Execute` button. The cells should now all get filled with their final values after a short time (depending on the the selected AI model latency). Note that the results will replace the formula, so the formula is now lost once the poller is executed and the results are received.
+
+7. Optional: If you want to be able to call the UDF again next time you open the file without having to import again the modules, you can save your worksheet as a `.xslm` file.
