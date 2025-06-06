@@ -7,6 +7,12 @@ There are two versions:
 * `Gemini_udf()` which is a very similar function to the add-in, it is likewise sequential and blocking (ie, when the fill handle is used, a calculation starts and each cell is filled one after the other).
 * `Gemini_udf_p()` which is a non-blocking parallel processing ready version, which allows to process with parallelism in a non-blocking way, so that it is much faster to work on multiple cells. It is also triggered on-demand via a macro `StartGeminiPoller`, instead of automatically on fill handle activation.
 
+### How to install the UDF functions
+
+First you need to git clone this repository, do not just download the files, otherwise the line endings will be converted into LF. If you do download the files manually without git clone, then ensure to convert the line endings into CRLF (this can be done in one click with the opensource editor Notepad++).
+
+The functions were tested on Microsoft Office 2016 version 2412 build 18324.20194.
+
 ### How to use Gemini_udf (sequential processing UDF)
 
 To use it, you need to import the .blas file as a module in any Excel file where you want to use the function.
