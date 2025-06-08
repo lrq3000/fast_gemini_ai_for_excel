@@ -18,7 +18,7 @@ https://aistudio.google.com/app/apikey
 
 You can generate free API keys, but they are then rate limited (so you will get some cells with a rate limit message instead of the result you want if you are calculating too many cells at once) and Google will collect all the data you send to train on it.
 
-If you want to lift rate limits to process a lot of cells very fast, as well as keeping your data private, out of Google's training dataset, and have no rate limit, you can generate paid API keys on the same page after activating your Google Cloud billing account and have an active payment method. Note that this also allows you to enjoy free services such as the web interface of Google AI Studio for free but still keep your data [out of the training dataset]https://discuss.ai.google.dev/t/google-ai-studio-is-unsafe-for-private-data/78277/7).
+If you want to lift rate limits to process a lot of cells very fast, as well as keeping your data private, out of Google's training dataset, and have no rate limit, you can generate paid API keys on the same page after activating your Google Cloud billing account and have an active payment method. Note that this also allows you to enjoy free services such as the web interface of Google AI Studio for free but still keep your data [out of the training dataset](https://discuss.ai.google.dev/t/google-ai-studio-is-unsafe-for-private-data/78277/7).
 
 Note that the speed of the response depends on whether the model needs to think to process the request, and also the length of the prompt. Usually, a <1k tokens prompt including other cells contents as context does not take more than a few milliseconds to process for hundreds of cells in parallel.
 
