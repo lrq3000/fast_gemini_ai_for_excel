@@ -1,6 +1,6 @@
-## Excel Plugin for Google's Gemini AI Model
+# Fast Gemini AI for Excel
 
-⚡ Excel Plugin for Google Gemini 🤖 — Now with Ultra-Fast Parallel Processing 🚀 Custom AI functions right in your spreadsheet. Smarter, faster, better.
+⚡ Excel Macros and Plugins for Google Gemini 🤖 — Now with Ultra-Fast Parallel Processing 🚀 Custom AI functions right in your spreadsheet. Smarter, faster, better.
 
 Get AI-enriched results in milliseconds over hundreds of cells! Automate and systematize various tasks from freeform text cells such as labelling, classification, keywords extraction, sentiment analysis, etc.
 
