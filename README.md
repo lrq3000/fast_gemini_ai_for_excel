@@ -11,7 +11,7 @@ The Excel Add-in is the most feature-rich, but the source code is unfortunately 
 For installation and usage, refer to the instructions by clicking on the link below:  
 [Instructions Link](https://www.listendata.com/2023/12/integrate-gemini-into-excel.html)
 
-Note that the Add-in was moved to the `addin` folder. The rest of teh instructions remain the same.
+Note that the Add-in was moved to the `addin` folder. The rest of the instructions remain the same.
 
 ## Instructions for the user-defined functions (UDFs)
 
