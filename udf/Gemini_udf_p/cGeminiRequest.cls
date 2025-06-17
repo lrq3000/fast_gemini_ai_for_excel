@@ -52,12 +52,13 @@ End Property
 
 Public Sub CommitResult()
     Dim txt$
-    If http.Status = 200 Then
+    If http.Status = 200 Then ' Success! HTTP OK, server returned content
         txt = ExtractContent(http.responseText)
-    Else
-        txt = "Error: " & ExtractError(http.responseText)
+    Else ' Failure! HTTP error or server returned an error, typically rate limit hit
+        txt = "Error: " & ExtractError(http.responseText) ' extract error message
+        txt = txt & vbLf & vbLf & "Retry with: " & TargetCell.Formula ' append original formula so that the user can retry
     End If
-    
+
     Application.EnableEvents = False
     TargetCell.Value = txt
     Application.EnableEvents = True
