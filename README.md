@@ -41,9 +41,9 @@ There are two versions of the UDFs:
 
 * `Gemini_udf_p()` which is a non-blocking parallel processing ready version, which allows to process with parallelism in a non-blocking way, so that it is much faster to work on multiple cells. It also extremely responsive since the UI is not blocked while the cells are calculating. It is also triggered on-demand via a macro `StartGeminiPoller`, instead of automatically on fill handle activation. It also automatically supports a soft exponential backoff retry mechanism (if hitting rate limit, it will retry with a randomly chosen delay in an increasingly multiplied time window for each retry - both the max delay in milliseconds and the number of retries are configurable as parameters).
 
-Why use user-defined functions instead of the add-in? First they are more lightweight, easier to modify and track changes, and also it seems they are more stable, causing no crashes whereas the add-in may cause crashes.
+Why use user-defined functions instead of the add-in? First they are more lightweight, easier to modify and track changes, and also it seems they are more stable, causing no crashes whereas the add-in may do so.
 
-Note: with a paid API key, it is very fast to get charged for a lot of cells with the parallel processing function, since it is very fast as it sends requests in parallel, so be careful to test first on a couple of cells before applying to more than hundreds of cells, otherwise you may have a high bill if you have to run multiple times on thousands of cells because your prompt was not as accurate as you thought. So iterate on your prompt first on a few cells before extending to more to keep the cost in your control.
+Note: with a paid API key, getting heavily charged can happen very fast when processing over a lot of cells with the parallel processing function, since it is very fast as it sends requests in parallel, so be careful to test first on a couple of cells before applying to more than hundreds of cells, otherwise you may have a high bill if you have to run multiple times on thousands of cells because your prompt was not as accurate as you thought. So iterate on your prompt first on a few cells before extending to more to keep the cost in your control.
 
 ### How to install the UDF functions
 
@@ -87,6 +87,6 @@ Development note: to test changes you might make to the code, after importing bo
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
-The add-in was originally published by deepanshu88 on [GitHub](https://github.com/deepanshu88/geminiAI-Excel/). The blocking UDF was originally published also by Deepanshu88 in [a blog post](https://www.listendata.com/2023/12/integrate-gemini-into-excel.html). This original work was opensourced at commit 1c4d5b72860890f794b5db7ad66aa545c7949fa9 of the original repository, before being deleted. Unfortunately, the addin remains password-protected although technically it is opensource licensed, but the sourcecode is not currently available.
+The add-in was originally published by deepanshu88 on [GitHub](https://github.com/deepanshu88/geminiAI-Excel/). The blocking UDF was originally published also by Deepanshu88 in [a blog post](https://www.listendata.com/2023/12/integrate-gemini-into-excel.html). This original work was opensourced at commit 1c4d5b72860890f794b5db7ad66aa545c7949fa9 of the original repository, before being deleted. Unfortunately, the addin remains password-protected although technically it is opensource licensed, but the sourcecode is not currently accessible.
 
 The parallel processing UDF was made by Stephen Karl Larroque and first published on [GitHub](https://github.com/lrq3000/geminiAI-Excel).
