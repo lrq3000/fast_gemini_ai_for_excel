@@ -27,7 +27,8 @@ Public Function Gemini_udf_p( _
         Optional model As String = "gemini-2.5-flash-preview-05-20", _
         Optional word_count As Long = 0, _
         Optional maxDelayMs As Long = 500, _
-        Optional retries As Integer = 2) As Variant
+        Optional retries As Integer = 2, _
+        Optional server_url As String = "") As Variant ' Added optional server_url parameter for custom API endpoints
 
     If Len(api_key) = 0 Then
         Gemini_udf_p = "Error: API key missing"
@@ -37,7 +38,8 @@ Public Function Gemini_udf_p( _
     If gGeminiRequests Is Nothing Then Set gGeminiRequests = New Collection
 
     Dim req As New cGeminiRequest
-    req.Launch prompt, api_key, model, word_count, Application.Caller, retries, maxDelayMs
+    ' Pass the new server_url parameter to the Launch method of cGeminiRequest
+    req.Launch prompt, api_key, model, word_count, Application.Caller, retries, maxDelayMs, server_url
     gGeminiRequests.Add req
 
     Gemini_udf_p = "Pending..."              'temporary placeholder
