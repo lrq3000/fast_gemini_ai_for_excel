@@ -45,13 +45,27 @@ Why use user-defined functions instead of the add-in? First they are more lightw
 
 Note: with a paid API key, getting heavily charged can happen very fast when processing over a lot of cells with the parallel processing function, since it is very fast as it sends requests in parallel, so be careful to test first on a couple of cells before applying to more than hundreds of cells, otherwise you may have a high bill if you have to run multiple times on thousands of cells because your prompt was not as accurate as you thought. So iterate on your prompt first on a few cells before extending to more to keep the cost in your control.
 
-### How to install the UDF functions
+There are two ways to install the UDF functions: the easy method, and the manual method.
+
+### Easy install method
+
+Use this option if you just want to try or if you want to start a new spreadsheet.
+
+Just go to the GitHub Releases and download the `.xslm` file for the latest release. This is a `.xslx` Excel file with all the required modules imported and with cells preconfigured to ease usage.
+
+### Manual install method
+
+Use this option if you want to add the UDFs on your already existing spreadsheet. You will get all the features, but the process is just a bit more involved the first time (but once you know how to do it, it is very fast).
+
+Note: This unfortunately cannot be automated and the online store is only for add-ins, not for UDFs.
+
+#### How to install the UDF functions: preliminary steps
 
 First you need to git clone this repository, do not just download the files, otherwise the line endings will be converted into LF. If you do download the files manually without git clone, then ensure to convert the line endings into CRLF (this can be done in one click with the opensource editor Notepad++).
 
 The functions were tested on Microsoft Office 2016 version 2412 build 18324.20194.
 
-### How to use Gemini_udf (sequential processing UDF)
+#### How to install Gemini_udf (sequential processing UDF)
 
 To use it, you need to import the .blas file as a module in any Excel file where you want to use the function.
 
@@ -63,25 +77,54 @@ To use it, you need to import the .blas file as a module in any Excel file where
 
 Note that if you make any change to the sourcecode files, you will need to delete the modules in your Excel sheet and import again the files.
 
-### How to use Gemini_udf_p (parallel processing UDF)
+#### How to install Gemini_udf_p (parallel processing UDF)
 
 To use it, you need to import the .bas and .cls files as modules in any Excel file where you want to use the function.
 
 1.  Open the **VBA editor** (`Alt + F11` -- or on some laptops, you may need to press `Fn + Alt + F11`)
-    
+
 2.  Then go to `File > Import File...` and select `Gemini_udf/GeminiAI.bas`. It should be imported under a `Module` folder. NOTE: if you get a #NAME error, this means the module could not be imported, so make sure this file has CRLF line endings (you need to clone the git repository, you cannot just download the raw file from rawgithub).
 
-3. Do the same with the `Gemini_udf/cGeminiRequest.cls` file, it should be imported under a `Class Module` folder. NOTE: if it gets imported as a simple Module instead of a Class Module (or if you get the error `Expected: instruction end`, then ensure the .cls file has CRLF line returns and not just LF.
+3.  Do the same with the `Gemini_udf/cGeminiRequest.cls` file, it should be imported under a `Class Module` folder. NOTE: if it gets imported as a simple Module instead of a Class Module (or if you get the error `Expected: instruction end`, then ensure the .cls file has CRLF line returns and not just LF.
 
-4. In any cell, type `Gemini_udf_p("Prompt text"&A1;"Gemini_API_key";"Gemini_model")`. The Gemini model is optional, and also a max word count for the response can be added as a 4th optional argument. The cell should now show "Pending..."
+4.  Also import `JsonConverter.bas` and `Dictionary.cls`, which are necessary helper modules to parse LLM's JSON responses, they work on both Windows, Mac and Linux.
 
-5. Use the fill handle to copy while increasing the counter over a range of cells. All the cells should show "Pending...". Note: if you want to be able to re-run the command, it is now time to make a copy in another cell or in a notebad, because the result will replace the formula.
+5.  In any cell, type `Gemini_udf_p("Prompt text"&A1;"Gemini_API_key";"Gemini_model")`. The Gemini model is optional, and also a max word count for the response can be added as a 4th optional argument. The cell should now show "Pending..."
 
-6. Open the Macros viewer (press `Alt + F8` or `Fn + Alt + F8` on some laptops), then select `StartGeminiPoller`, and tap on the `Execute` button. The cells should now all get filled with their final values after a short time (depending on the the selected AI model latency). Note that the results will replace the formula, so the formula is now lost once the poller is executed and the results are received.
+6.  Use the fill handle to copy while increasing the counter over a range of cells. All the cells should show "Pending...". Note: if you want to be able to re-run the command, it is now time to make a copy in another cell or in a notebad, because the result will replace the formula.
 
-7. Optional: If you want to be able to call the UDF again next time you open the file without having to import again the modules, you can save your worksheet as a `.xslm` file.
+7.  Open the Macros viewer (press `Alt + F8` or `Fn + Alt + F8` on some laptops), then select `StartGeminiPoller`, and tap on the `Execute` button. The cells should now all get filled with their final values after a short time (depending on the the selected AI model latency). Note that the results will replace the formula, so the formula is now lost once the poller is executed and the results are received.
+
+8.  Optional: If you want to be able to call the UDF again next time you open the file without having to import again the modules, you can save your worksheet as a `.xslm` file.
 
 Development note: to test changes you might make to the code, after importing both modules, in the Microsoft Visual Basic for Applications window (ALT+F11), click on Debug > Compile (name of) VBA project. This should highlight any issue. This is necessary if after a change you get cells showing a #VALUE error.
+
+## Usage
+
+### `Gemini_udf_p(prompt, api_key, [model], [word_count], [maxDelayMs], [retries], [server_url], [asynchronous])`
+
+This User-Defined Function (UDF) for Microsoft Excel allows users to send prompts directly to Large Language Models (LLMs) from an Excel cell. It supports Google Gemini (bring your own API key) or ChatGPT-compatible API endpoints (including offline self-hosted servers such as ollama). It is designed to operate efficiently, supporting by default asynchronous parallel processing with automatic soft exponential backoff retries (ie, longer and longer wait times after each failures) to avoid hitting rate limits.
+
+**Arguments:**
+
+*   **`prompt`** (String, Required): The text prompt or query to be sent to the LLM.
+*   **`api_key`** (String, Optional): Your Google Cloud API or OpenAI-compatible key for authenticating requests. Leave empty if using an offline self-hosted server such as ollama.
+*   **`model`** (String, Optional, Default: `"gemini-2.5-flash-preview-05-20"`): Specifies the LLM model to be used.
+*   **`word_count`** (Long, Optional, Default: `0`): Desired word count for the generated response.
+*   **`maxDelayMs`** (Long, Optional, Default: `500`): Maximum delay in milliseconds between retries for API requests. 
+    The wait will be random in this bound. Will be multiplied for each retry.
+*   **`retries`** (Integer, Optional, Default: `2`): Number of times to retry an API request if it fails.
+*   **`server_url`** (String, Optional, Default: `""`): Custom server URL for the Gemini API endpoint.
+*   **`asynchronous`** (Boolean, Optional, Default: `True`): Controls execution mode. `True` for asynchronous parallel processing (returns "Pending...", updates later); `False` for synchronous sequential processing (waits for response after each cell's processing, returns directly).
+
+**Returns:**
+
+*   **Variant**: The generated text response from the Gemini LLM. Returns "Pending..." initially in asynchronous mode, then press ALT+F8 and select StartPoller to launch the requests. In case of an error, it may return an error message or a specific error value.
+
+**Example usages:**
+   * offline selfhosted ollama call:
+     `=Gemini_udf_p("What is the capital of France?";"a";"qwen2.5:1.5b";0;500;2;"http://localhost:11434")`
+
 
 ## License
 
@@ -90,3 +133,5 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 The add-in was originally published by deepanshu88 on [GitHub](https://github.com/deepanshu88/geminiAI-Excel/). The blocking UDF was originally published also by Deepanshu88 in [a blog post](https://www.listendata.com/2023/12/integrate-gemini-into-excel.html). This original work was opensourced at commit 1c4d5b72860890f794b5db7ad66aa545c7949fa9 of the original repository, before being deleted. Unfortunately, the addin remains password-protected although technically it is opensource licensed, but the sourcecode is not currently accessible.
 
 The parallel processing UDF was made by Stephen Karl Larroque and first published on [GitHub](https://github.com/lrq3000/geminiAI-Excel).
+
+This project is using the incredible [Tim Hall's VBA-JSON](https://github.com/VBA-tools/VBA-JSON/) and [VBA-Dictionary](https://github.com/VBA-tools/VBA-Dictionary) to parse LLM API's responses reliably.
