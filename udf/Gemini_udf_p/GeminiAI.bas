@@ -128,3 +128,27 @@ Public Sub PollAsyncRequests()
     End If
 End Sub
 
+'==============================================================
+'  JSON HELPERS  (unchanged from before)
+'==============================================================
+Public Function ExtractContent(jsonString As String) As String
+    Dim p1&, p2&, s$
+    p1 = InStr(jsonString, """text"": """) + 9
+    If p1 < 10 Then ExtractContent = "Error: parse failure": Exit Function
+    p2 = InStr(p1, jsonString, """")
+    s = Mid$(jsonString, p1, p2 - p1)
+    s = Replace(s, "\""", """")
+    s = Replace(s, "\n", vbLf)
+    If Left$(Trim$(s), 1) = "=" Then s = "'" & s
+    ExtractContent = Trim$(s)
+End Function
+
+Public Function ExtractError(jsonString As String) As String
+    Dim p1&, p2&, s$
+    p1 = InStr(jsonString, """message"": """) + 12
+    If p1 < 13 Then ExtractError = "unknown error": Exit Function
+    p2 = InStr(p1, jsonString, """")
+    s = Mid$(jsonString, p1, p2 - p1)
+    s = Replace(s, "\""", """")
+    ExtractError = Trim$(s)
+End Function

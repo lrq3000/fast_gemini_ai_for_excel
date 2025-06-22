@@ -104,35 +104,33 @@ Public Property Get IsDone() As Boolean
 End Property
 
 Public Sub CommitResult()
-    ' Commits the result of the HTTP request to the target cell.
-    ' This method handles successful responses by parsing JSON and extracting content,
-    ' and handles errors by extracting error messages and providing retry information.
+    Dim txt$
+    Dim jsonResponse As Object ' For parsing JSON response
 
-    Dim resultText As String
+    If http.Status = 200 Then ' Success! HTTP OK, server returned content
+        ' Attempt to parse as OpenAI-compatible response first
+        On Error Resume Next ' Enable error handling for JSON parsing
+        Set jsonResponse = JsonConverter.ParseJson(http.responseText)
+        On Error GoTo 0 ' Disable error handling
 
-    ' Call the shared JSON parsing logic.
-    ' This ensures m_ParsedJson is populated for asynchronous requests,
-    ' or set to Nothing if parsing fails.
-    Call ParseHttpResponse
-
-    ' Check if the HTTP request was successful (HTTP Status 200 OK)
-    If http.Status = 200 Then
-        ' Extract the relevant text content from the parsed JSON.
-        ' This leverages the ExtractedText property, which handles cases where m_ParsedJson is Nothing.
-        resultText = Me.ExtractedText
-    Else
-        ' If the HTTP request failed, extract the error message from the response.
-        ' This uses the ExtractedError property, which handles cases where m_ParsedJson is Nothing.
-        resultText = "Error: " & Me.ExtractedError
-        ' Append the original formula to allow the user to easily retry the request.
-        resultText = resultText & vbLf & vbLf & "Retry with: " & TargetCell.Formula
+        If Not jsonResponse Is Nothing And jsonResponse.Exists("choices") Then
+            ' OpenAI-compatible response: content is in choices[0].message.content
+            If jsonResponse("choices")(1).Exists("message") Then
+                If jsonResponse("choices")(1)("message").Exists("content") Then
+                    txt = jsonResponse("choices")(1)("message")("content")
+                End If
+            End If
+        Else
+            ' Fallback to Gemini response parsing if not OpenAI-compatible
+            txt = ExtractContent(http.responseText)
+        End If
+    Else ' Failure! HTTP error or server returned an error, typically rate limit hit
+        txt = "Error: " & ExtractError(http.responseText) ' extract error message
+        txt = txt & vbLf & vbLf & "Retry with: " & TargetCell.Formula ' append original formula so that the user can retry
     End If
 
-    ' Temporarily disable events to prevent triggering other macros during cell update.
     Application.EnableEvents = False
-    ' Commit the extracted result (either content or error message) to the target cell.
-    TargetCell.Value = resultText
-    ' Re-enable events.
+    TargetCell.Value = txt
     Application.EnableEvents = True
 End Sub
 
