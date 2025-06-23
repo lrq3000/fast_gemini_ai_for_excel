@@ -125,6 +125,19 @@ This User-Defined Function (UDF) for Microsoft Excel allows users to send prompt
    * offline selfhosted ollama call:
      `=Gemini_udf_p("What is the capital of France?";"a";"qwen2.5:1.5b";0;500;2;"http://localhost:11434")`
 
+## Troubleshooting
+
+### Running the UDF function crashes Excel
+
+There are a LOT of reasons why this may happen, here are common fixes and things to check:
+
+* Check you supplied the right number of arguments and at the right positions and of the right types.
+    * If there are optional arguments you are skipping, check you simply provide no value at all (eg, `func(;;10)` instead of `func(0;"";10)`), because otherwise Excel tends to cast "empty" values into NaN or other unexpected and unwanted values instead of the one you supplied explicitly.
+* Ensure you imported the latest versions of the modules (CTRL+F11 and delete and import them again).
+* Stop, then reinitialize the VBA engine (in the CTRL+F11 window, the pause button then the square button).
+* Reevaluate the cell (F9) after reimporting the modules. If only this reevaluated cell works later on, you will know that you need to use the fill handle to reapply the reevaluated cell over the range of cells you want, even if the formula is exactly the same.
+* If nothing else works, close all Excel files, then open a new blank one, then importe the modules, then try the function. If it works, you know that it is your other Excel files that have an issue.
+    * A way to workaround this issue that may be a bit drastic is to save your Excel file as a .xslx temporarily (instead of .xslm) to delete all macros, then you can reimport the modules manually and then save as a new .xslm , this should fix all issues (if the modules' code works fine of course!).
 
 ## License
 
